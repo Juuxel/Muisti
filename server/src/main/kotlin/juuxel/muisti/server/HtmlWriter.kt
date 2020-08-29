@@ -1,4 +1,4 @@
-package juuxel.muisti.server.html
+package juuxel.muisti.server
 
 import kotlinx.html.Tag
 import java.io.Writer

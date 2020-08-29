@@ -1,7 +1,5 @@
-package juuxel.muisti.server.html
+package juuxel.muisti.server
 
-import juuxel.muisti.server.DeckIo
-import juuxel.muisti.server.addStyle
 import kotlinx.html.a
 import kotlinx.html.body
 import kotlinx.html.details

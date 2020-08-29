@@ -1,7 +1,6 @@
 package juuxel.muisti.server
 
 import io.javalin.Javalin
-import juuxel.muisti.server.html.Pages
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import picocli.CommandLine
