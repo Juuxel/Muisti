@@ -29,9 +29,7 @@ private class Server : Runnable {
         }
 
         app.get("/data/:deck") { ctx ->
-            DeckIo.readDeck(ctx.pathParam("deck")).ifOk {
-                ctx.contentType("application/json").result(it)
-            }
+            ctx.contentType("application/json").result(DeckIo.readDeck(ctx.pathParam("deck")))
         }
 
         app.exception(FileNotFoundException::class.java) { e, ctx ->

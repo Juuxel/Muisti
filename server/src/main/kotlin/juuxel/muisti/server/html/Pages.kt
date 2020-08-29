@@ -2,8 +2,6 @@ package juuxel.muisti.server.html
 
 import juuxel.muisti.server.DeckIo
 import juuxel.muisti.server.addStyle
-import juuxel.muisti.util.Result
-import juuxel.muisti.util.result
 import kotlinx.html.a
 import kotlinx.html.body
 import kotlinx.html.details
@@ -22,10 +20,10 @@ import java.io.PrintWriter
 import kotlin.Exception
 
 object Pages {
-    fun buildHomePage(): Result<String, Exception> = result {
-        val decks = DeckIo.listDecks().bind()
+    fun buildHomePage(): String {
+        val decks = DeckIo.listDecks()
 
-        buildString {
+        return buildString {
             appendHTML().html {
                 head {
                     title("muisti")
@@ -50,10 +48,10 @@ object Pages {
         }
     }
 
-    fun buildDeckPage(id: String): Result<String, Exception> = result {
-        val deck = DeckIo.parseDeck(id).bind()
+    fun buildDeckPage(id: String): String {
+        val deck = DeckIo.parseDeck(id)
 
-        buildString {
+        return buildString {
             appendHTML().html {
                 head {
                     title("muisti - ${deck.title}")
