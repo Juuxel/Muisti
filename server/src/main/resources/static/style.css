@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=Delius&display=swap');
+
+body {
+    font-family: Delius, cursive, sans-serif;
+    font-size: 24pt;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.error {
+    color: darkred;
+}
+
+.code {
+    font-family: monospace;
+}
+
+.card, .deck-container, .buttons {
+    width: min(10em, 100%);
+}
+
+.card, .deck-container {
+    padding: 2em;
+    padding-top: 1em;
+    box-shadow: 0 0.05em 0.2em lightgrey;
+    border: 1px solid lightgrey;
+    border-radius: 0.3em;
+    margin-bottom: 1em;
+
+    min-height: 6em;
+}
+
+.deck-list {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.deck-list a {
+    color: grey;
+    text-decoration: none;
+
+    transition: color 0.2s linear;
+}
+
+.deck-list a:hover {
+    color: black;
+}
+
+.buttons {
+    display: grid;
+    grid-column-gap: 0.5em;
+    padding-bottom: 0.5em;
+}
+
+.button {
+    cursor: pointer;
+    user-select: none;
+}
+
+.option-button {
+    grid-row: 1;
+    text-align: center;
+    padding: 0.15em 0.3em;
+    transition: background-color 0.2s linear;
+}
+
+.yes {
+    background-color: lightgreen;
+    border: 1px solid lightgrey;
+    grid-column: 1;
+}
+
+.yes:hover {
+    background-color: palegreen;
+}
+
+.no {
+    background-color: lightcoral;
+    border: 1px solid lightgrey;
+    grid-column: 2;
+}
+
+.no:hover {
+    background-color: tomato;
+}
+
+.card {
+    display: grid;
+    grid-template-rows: 3fr 1fr;
+
+    padding-bottom: 0.3em;
+}
+
+.card-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-button-area {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.finished-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.text-button, .card-indicator {
+    color: lightgrey;
+    transition: color 0.2s linear;
+    text-decoration: none;
+}
+
+.text-button:hover {
+    color: grey;
+}
+
+pre {
+    font-size: 11pt;
+}
+
+summary {
+    cursor: pointer;
+}
+
+@media only screen and (orientation: portrait) and (max-width: 1000px) {
+    body {
+        font-size: 8vw;
+    }
+
+    .card, .deck-container, .buttons {
+        width: 60vw;
+    }
+
+    body {
+        height: 100%;
+    }
+
+    .option-button {
+        padding-top: 1em;
+        padding-bottom: 1em;
+    }
+}
