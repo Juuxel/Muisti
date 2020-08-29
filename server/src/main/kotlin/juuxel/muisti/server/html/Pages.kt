@@ -12,7 +12,6 @@ import kotlinx.html.h1
 import kotlinx.html.h2
 import kotlinx.html.head
 import kotlinx.html.html
-import kotlinx.html.i
 import kotlinx.html.meta
 import kotlinx.html.pre
 import kotlinx.html.script

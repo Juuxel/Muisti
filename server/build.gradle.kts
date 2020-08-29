@@ -1,9 +1,10 @@
 plugins {
     java
-    kotlin("jvm") version "1.4.0"
-    kotlin("plugin.serialization") version "1.4.0"
+    kotlin("jvm")
+    kotlin("plugin.serialization")
     application
     id("com.github.johnrengelman.shadow") version "6.0.0"
+    id("org.jmailen.kotlinter") version "3.0.2"
 }
 
 repositories {

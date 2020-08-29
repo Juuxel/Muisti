@@ -1,6 +1,6 @@
 plugins {
-    kotlin("js") version "1.4.0"
-    kotlin("plugin.serialization") version "1.4.0"
+    kotlin("js")
+    kotlin("plugin.serialization")
 }
 
 repositories {
