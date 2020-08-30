@@ -5,7 +5,7 @@ import picocli.CommandLine
 import java.io.FileNotFoundException
 import java.util.Properties
 
-@CommandLine.Command(name = "muisti-server", mixinStandardHelpOptions = true, versionProvider = VersionProvider::class)
+@CommandLine.Command(name = "muisti", mixinStandardHelpOptions = true, versionProvider = VersionProvider::class)
 private class Server : Runnable {
     @CommandLine.Parameters(index = "0", description = ["the port for the server to use"], defaultValue = "7000", showDefaultValue = CommandLine.Help.Visibility.ALWAYS)
     private var port: Int = -1
