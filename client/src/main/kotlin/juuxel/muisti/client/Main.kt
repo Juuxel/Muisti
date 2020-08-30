@@ -1,7 +1,7 @@
 package juuxel.muisti.client
 
-import juuxel.muisti.data.Card
 import juuxel.muisti.data.Deck
+import juuxel.muisti.game.Game
 import kotlinx.browser.document
 import kotlinx.browser.window
 import kotlinx.dom.hasClass
@@ -16,19 +16,11 @@ import org.w3c.dom.Element
 import org.w3c.dom.ItemArrayLike
 import org.w3c.xhr.XMLHttpRequest
 
+lateinit var game: Game
+
 // Specific elements
 lateinit var cardContent: Element
 lateinit var cardIndicator: Element
-
-// Sides
-var mainSide: Card.Side = Card.Side.FRONT
-var side: Card.Side = mainSide
-
-// Cards
-lateinit var deck: Deck
-var currentCard: Int = 0
-lateinit var cards: List<Card>
-val unknownCards: MutableList<Card> = ArrayList()
 
 inline fun <T> ItemArrayLike<T>.forEach(fn: (T) -> Unit) {
     for (i in 0 until length) {
@@ -41,40 +33,31 @@ fun main() {
         cardContent = document.querySelector(".card-content") ?: error("Could not find .card-content!")
         cardIndicator = document.querySelector(".card-indicator") ?: error("Could not find .card-indicator!")
 
-        document.getElementsByClassName("flip-button").forEach {
-            it.addEventListener("click", {
-                side = side.flip()
-                showCurrentCard()
+        document.getElementsByClassName("flip-button").forEach { button ->
+            button.addEventListener("click", {
+                game.flipCard()
             })
         }
 
-        document.getElementsByClassName("flip-deck-button").forEach {
-            it.addEventListener("click", {
-                mainSide = mainSide.flip()
-                side = side.flip()
-                showCurrentCard()
+        document.getElementsByClassName("flip-deck-button").forEach { button ->
+            button.addEventListener("click", {
+                game.flipAll()
             })
         }
 
         document.getElementsByClassName("option-button").forEach { button ->
             button.addEventListener("click", {
                 it.stopImmediatePropagation()
-
-                if (button.hasClass("no")) {
-                    cards.getOrNull(currentCard)?.let(unknownCards::add)
-                }
-
-                currentCard++
-                side = mainSide
-                showCurrentCard()
+                game.moveToNext(button.hasClass("no"))
             })
         }
 
         val req = XMLHttpRequest()
         req.onload = {
             if (req.status == 200.toShort()) {
-                deck = Json.decodeFromString(req.responseText)
-                run()
+                val deck = Json.decodeFromString<Deck>(req.responseText)
+                game = Game(deck, ::render)
+                game.start()
             }
         }
 
@@ -83,41 +66,35 @@ fun main() {
     }
 }
 
-fun run(useUnknowns: Boolean = false) {
-    currentCard = 0
-    cards = if (useUnknowns) unknownCards.shuffled() else deck.cards.shuffled()
-    unknownCards.clear()
-    side = mainSide
-    showCurrentCard()
-}
-
-private fun showCurrentCard() {
-    val finished = currentCard > cards.lastIndex
-
-    if (finished) {
+private fun render(game: Game) {
+    if (game.hasRemainingCards()) {
+        showCardContent {
+            game.currentCard.writeTo(this, game.side)
+        }
+    } else {
         showCardContent {
             div(classes = "finished-panel") {
                 p {
                     +buildString {
                         append("Finished! You knew ")
 
-                        if (unknownCards.isEmpty()) {
+                        if (game.unknownCards.isEmpty()) {
                             append("all of the cards! \uD83E\uDD73")
                         } else {
-                            append(cards.size - unknownCards.size)
+                            append(game.cards.size - game.unknownCards.size)
                             append("\u00A0/\u00A0")
-                            append(cards.size)
+                            append(game.cards.size)
                             append(" cards.")
                         }
                     }
                 }
 
-                if (unknownCards.isNotEmpty()) {
+                if (game.unknownCards.isNotEmpty()) {
                     div(classes = "button text-button") {
                         +"revise unknown cards"
 
                         onClickFunction = {
-                            run(useUnknowns = true)
+                            game.start(reviseUnknowns = true)
                         }
                     }
                 }
@@ -126,19 +103,15 @@ private fun showCurrentCard() {
                     +"restart"
 
                     onClickFunction = {
-                        run(useUnknowns = false)
+                        game.start(reviseUnknowns = false)
                     }
                 }
             }
         }
-    } else {
-        showCardContent {
-            cards[currentCard].writeTo(this, side)
-        }
     }
 
     // Update card indicator
-    cardIndicator.textContent = if (finished) null else "${currentCard + 1} / ${cards.size}"
+    cardIndicator.textContent = if (game.hasRemainingCards()) "${game.currentCardIndex + 1} / ${game.cards.size}" else null
 }
 
 private fun showCardContent(block: TagConsumer<*>.() -> Unit) {
