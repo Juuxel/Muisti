@@ -1,13 +1,9 @@
 package juuxel.muisti.server
 
 import io.javalin.Javalin
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import picocli.CommandLine
 import java.io.FileNotFoundException
 import java.util.Properties
-
-private val LOGGER: Logger = LoggerFactory.getLogger("muisti-server")
 
 @CommandLine.Command(name = "muisti-server", mixinStandardHelpOptions = true, versionProvider = VersionProvider::class)
 private class Server : Runnable {
@@ -38,8 +34,6 @@ private class Server : Runnable {
         app.exception(Exception::class.java) { e, ctx ->
             ctx.status(500).html(Pages.buildErrorPage(500, e))
         }
-
-        LOGGER.info("Server started! Check it out at http://127.0.0.1:$port")
     }
 }
 
